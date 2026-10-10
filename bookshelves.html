@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>本棚の一覧 - Xutoco</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://xutoco.vercel.app/favicon.png">
+</head>
+<body>
+
+    <!-- 右上コピーライト -->
+    <p style="position: fixed; top: 15px; right: 20px; color: #bbb; font-size: 0.75rem; margin: 0; z-index: 100;">
+        © 2026 Xutoco
+    </p>
+
+    <header style="max-width: 600px; margin: 0 auto; padding: 20px 20px 0;">
+        <h1>本棚の一覧</h1>
+        <p style="color: #666; font-size: 0.9rem; margin-top: 5px;">本棚</p>
+    </header>
+
+    <main style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div id="bookshelfList" style="display: flex; flex-direction: column; gap: 15px;">
+            <p style="color: #888;">本棚を読み込み中...</p>
+        </div>
+
+        <p style="margin-top: 30px;">
+            <a href="create-bookshelf.html" style="margin-right: 15px;">＋ 自分も本棚を作る</a>
+            <a href="index.html" style="color: #666; text-decoration: none;">← トップに戻る</a>
+        </p>
+    </main>
+
+    <!-- 左下フッター -->
+    <footer style="position: fixed; bottom: 15px; left: 20px; font-size: 0.8rem; z-index: 100;">
+        <a href="privacy.html" style="color: #888; text-decoration: none; margin-right: 15px;">プライバシーポリシー・利用規約</a>
+        <a href="https://forms.gle/FkSCEAcZFSJ9ZWMu5" target="_blank" rel="noopener noreferrer" style="color: #888; text-decoration: none;">お問い合わせ</a>
+    </footer>
+
+    <script type="module">
+        import { db } from "./firebase.js";
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+        const bookshelfList = document.getElementById("bookshelfList");
+
+        async function loadBookshelves() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "bookshelves"));
+                if (querySnapshot.empty) {
+                    bookshelfList.innerHTML = "<p style='color: #888;'>まだ作成された本棚はありません。</p>";
+                    return;
+                }
+
+                bookshelfList.innerHTML = "";
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const shelfId = docSnap.id;
+                    const title = data.title || "無題の本棚";
+                    const curator = data.curator || "名無し";
+                    const bookCount = data.bookIds ? data.bookIds.length : 0;
+
+                    const card = document.createElement("a");
+                    card.href = `bookshelf.html?id=${shelfId}`;
+                    card.style.cssText = "display: block; border: 1px solid #ddd; padding: 15px; border-radius: 6px; background: #fff; text-decoration: none; color: inherit; transition: background 0.2s;";
+                    card.onmouseover = () => card.style.background = "#faf8f5";
+                    card.onmouseout = () => card.style.background = "#fff";
+
+                    card.innerHTML = `
+                        <h2 style="margin: 0 0 5px; font-size: 1.1rem; color: #333;">${title}</h2>
+                        <p style="margin: 0; font-size: 0.85rem; color: #666;">キュレーター: ${curator} ｜ 収められた本: ${bookCount}冊</p>
+                    `;
+                    bookshelfList.appendChild(card);
+                });
+            } catch (error) {
+                console.error("本棚一覧の取得に失敗:", error);
+                bookshelfList.innerHTML = "<p style='color: red;'>本棚の読み込みに失敗しました。</p>";
+            }
+        }
+
+        loadBookshelves();
+    </script>
+</body>
+</html>

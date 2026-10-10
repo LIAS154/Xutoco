@@ -1,0 +1,306 @@
+body {
+    margin: 0;
+    background: #ffffff;
+    color: #222;
+    font-family: "ＭＳ Ｐゴシック", sans-serif;
+}
+
+header {
+    width: 760px;
+    max-width: 90%;
+    margin: 40px auto 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #222;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 42px;
+    font-family: "ＭＳ Ｐゴシック", sans-serif;
+}
+
+header p {
+    margin: 8px 0 0;
+    font-size: 16px;
+}
+
+main {
+    width: 760px;
+    max-width: 90%;
+    margin: 30px auto;
+}
+
+/* トップページ */
+
+main:not(.write-area) {
+    text-align: center;
+}
+
+button {
+    padding: 5px 14px;
+    margin: 5px;
+
+    border: 1px solid #555;
+    border-radius: 0;
+
+    background: #eee;
+    color: #222;
+
+    font-family: "ＭＳ Ｐゴシック", sans-serif;
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+button:hover {
+    background: #ddd;
+}
+
+/* 執筆画面 */
+
+.write-area {
+    text-align: left;
+}
+
+.write-area label {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.write-area input,
+.write-area textarea {
+    box-sizing: border-box;
+    width: 100%;
+
+    padding: 8px;
+
+    border: 1px solid #555;
+    border-radius: 0;
+
+    background: #f1f1f0;
+    color: #222;
+
+    font-family: "ＭＳ Ｐゴシック", sans-serif;
+    font-size: 16px;
+}
+
+.write-area textarea {
+    min-height: 400px;
+    resize: vertical;
+}
+
+.button-area {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.book-area {
+    width: 700px;
+    max-width: 90%;
+    margin: 40px auto;
+}
+
+.book-area h2 {
+    margin-bottom: 10px;
+    font-size: 28px;
+    font-weight: normal;
+}
+
+.book-area p {
+    margin: 5px 0;
+}
+
+.book-area hr {
+    margin: 25px 0;
+    border: 0;
+    border-top: 1px solid #222;
+}
+
+#bookContent {
+    white-space: pre-wrap;
+    line-height: 1.8;
+    font-size: 16px;
+}
+
+.book-area .button-area {
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid #222;
+}
+
+.book-search {
+    margin: 20px 0;
+}
+
+.book-search input {
+    box-sizing: border-box;
+    width: 100%;
+
+    padding: 8px;
+
+    border: 1px solid #555;
+    border-radius: 0;
+
+    background: #f1f1f0;
+    color: #222;
+
+    font-family: "ＭＳ Ｐゴシック", sans-serif;
+    font-size: 16px;
+}
+
+/* 本を探すページ */
+
+.book-list {
+    width: 760px;
+    max-width: 90%;
+    margin: 30px auto;
+}
+
+.book-list h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: normal;
+}
+
+#bookList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#bookList > div {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 18px 20px;
+
+    border: 1px solid #555;
+    background: #f7f7f6;
+}
+
+#bookList h3 {
+    margin: 0 0 8px;
+    font-size: 21px;
+    font-weight: normal;
+}
+
+#bookList h3 a {
+    color: #222;
+    text-decoration: none;
+}
+
+#bookList h3 a:hover {
+    text-decoration: underline;
+}
+
+#bookList p {
+    margin: 6px 0;
+    line-height: 1.6;
+}
+
+#bookList .book-description {
+    margin-top: 10px;
+}
+
+.book-sort {
+    margin: 15px 0 20px;
+}
+
+.book-sort label {
+    margin-right: 8px;
+}
+
+.book-sort select {
+    padding: 5px 8px;
+
+    border: 1px solid #555;
+    border-radius: 0;
+
+    background: #eee;
+    color: #222;
+
+    font-family: "ＭＳ Ｐゴシック", sans-serif;
+    font-size: 15px;
+}
+
+/* ====================
+   本棚のスタイル
+   ==================== */
+
+.bookshelf-main {
+    width: 90%;
+    max-width: 1000px;
+    margin: 40px auto;
+}
+
+/* 本棚の枠組み（上下に木目の棚板を配置） */
+.bookshelf-container {
+    width: 100%;
+    overflow-x: auto;
+    background: #faf8f5;
+    border: 1px solid #ddd;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* 上下の棚板（枠線） */
+.shelf-board {
+    height: 12px;
+    background: #8d6e63; /* 木目調の茶色 */
+    border-radius: 2px;
+}
+
+/* 本が立ち並ぶエリア */
+.bookshelf {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px; /* 本と本の間隔 */
+    min-height: 240px;
+    padding: 20px 15px 0; /* 上に少し余白をとって上の棚板と離す */
+}
+
+/* 背表紙（厚さがすべて同じ本） */
+.book-spine {
+    width: 45px;             /* 本の厚みを固定 */
+    height: 220px;            /* 本の高さを固定 */
+    background: #f1ede4;      /* 生成り色の背表紙 */
+    border: 1px solid #777;
+    writing-mode: vertical-rl;/* 縦書き表記 */
+    text-orientation: mixed;
+    padding: 12px 6px;
+    box-sizing: border-box;
+    cursor: pointer;
+    text-decoration: none;
+    color: #222;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    flex-shrink: 0;           /* 横スクロール時に潰れないように固定 */
+}
+
+/* 背表紙にホバーしたときに少し手前に浮き出る効果 */
+.book-spine:hover {
+    transform: translateY(-8px);
+    background: #e8e2d5;
+}
+
+/* 背表紙の中のタイトルと著者名 */
+.spine-title {
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-height: 140px;
+}
+
+.spine-author {
+    font-size: 11px;
+    color: #555;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-height: 60px;
+}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>本棚を作る - Xutoco</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://xutoco.vercel.app/favicon.png">
+</head>
+<body>
+
+    <!-- 右上コピーライト -->
+    <p style="position: fixed; top: 15px; right: 20px; color: #bbb; font-size: 0.75rem; margin: 0; z-index: 100;">
+        © 2026 Xutoco
+    </p>
+
+    <header style="max-width: 600px; margin: 0 auto; padding: 20px 20px 0;">
+        <h1>本棚を作る</h1>
+        <p style="color: #666; font-size: 0.9rem; margin-top: 5px;">おすすめの本を選ぶ。</p>
+    </header>
+
+    <main style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <form id="bookshelfForm">
+            <div style="margin-bottom: 20px;">
+                <label for="inputShelfTitle" style="display: block; margin-bottom: 5px; font-weight: bold;">本棚のタイトル</label>
+                <input type="text" id="inputShelfTitle" required placeholder="例：夜深くに読みたい3冊" style="width: 100%; padding: 8px; box-sizing: border-box;">
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label for="curatorName" style="display: block; margin-bottom: 5px; font-weight: bold;">作成者名（お名前・ペンネーム）</label>
+                <input type="text" id="curatorName" placeholder="名無し" style="width: 100%; padding: 8px; box-sizing: border-box;">
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 10px; font-weight: bold;">本棚に入れる本を選択（複数選択可）</label>
+                <div id="bookSelectList" style="max-height: 250px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; border-radius: 4px; background: #fff;">
+                    <p style="color: #888;">本を読み込み中...</p>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" style="padding: 10px 20px; cursor: pointer;">この内容で本棚を公開する</button>
+        </form>
+
+        <p style="margin-top: 30px;">
+            <a href="index.html" style="color: #666; text-decoration: none;">← トップに戻る</a>
+        </p>
+    </main>
+
+    <!-- 左下フッター -->
+    <footer style="position: fixed; bottom: 15px; left: 20px; font-size: 0.8rem; z-index: 100;">
+        <a href="privacy.html" style="color: #888; text-decoration: none; margin-right: 15px;">プライバシーポリシー・利用規約</a>
+        <a href="https://forms.gle/FkSCEAcZFSJ9ZWMu5" target="_blank" rel="noopener noreferrer" style="color: #888; text-decoration: none;">お問い合わせ</a>
+    </footer>
+
+<script type="module">
+        import { db } from "./firebase.js";
+        // script.js と同じバージョン（12.19.0）に合わせる
+        import { collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+        const bookSelectList = document.getElementById("bookSelectList");
+        const bookshelfForm = document.getElementById("bookshelfForm");
+        const submitBtn = document.getElementById("submitBtn");
+
+        // 公開中の本一覧の取得
+        async function loadBooks() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "books"));
+                if (querySnapshot.empty) {
+                    bookSelectList.innerHTML = "<p style='color: #888;'>まだ登録されている本がありません。</p>";
+                    return;
+                }
+
+                bookSelectList.innerHTML = "";
+                let count = 0;
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    if (data.published === true) {
+                        count++;
+                        const bookId = doc.id;
+                        const title = data.title || "無題";
+                        const author = data.author || "名無し";
+
+                        const item = document.createElement("div");
+                        item.style.marginBottom = "8px";
+                        item.innerHTML = `
+                            <label style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" name="selectedBooks" value="${bookId}">
+                                <span><strong>${title}</strong>（著: ${author}）</span>
+                            </label>
+                        `;
+                        bookSelectList.appendChild(item);
+                    }
+                });
+
+                if (count === 0) {
+                    bookSelectList.innerHTML = "<p style='color: #888;'>現在、出版されている本がありません。</p>";
+                }
+            } catch (error) {
+                console.error("エラー:", error);
+                bookSelectList.innerHTML = "<p style='color: red;'>本の読み込みに失敗しました。</p>";
+            }
+        }
+
+        // 保存処理
+        bookshelfForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById("inputShelfTitle").value.trim();
+            const curator = document.getElementById("curatorName").value.trim() || "名無し";
+            const checkboxes = document.querySelectorAll('input[name="selectedBooks"]:checked');
+
+            const bookIds = Array.from(checkboxes).map(cb => cb.value);
+
+            if (bookIds.length === 0) {
+                alert("本棚に入れる本を1冊以上選んでください。");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = "保存中...";
+
+            try {
+                const docRef = await addDoc(collection(db, "bookshelves"), {
+                    title: title,
+                    curator: curator,
+                    bookIds: bookIds,
+                    createdAt: serverTimestamp()
+                });
+
+                window.location.href = `bookshelf.html?id=${docRef.id}`;
+            } catch (error) {
+                console.error("作成エラー:", error);
+                alert("本棚の作成に失敗しました。");
+                submitBtn.disabled = false;
+                submitBtn.textContent = "この内容で本棚を公開する";
+            }
+        });
+
+        loadBooks();
+    </script>
+</body>
+</html>

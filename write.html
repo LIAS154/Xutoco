@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>執筆する - Xutoco</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- ファビコン -->
+    <link rel="icon" href="favicon.png" type="image/png">
+
+    <!-- OGP設定 -->
+    <meta property="og:title" content="執筆する - Xutoco">
+    <meta property="og:description" content="言葉を紡ぎ、自分だけの一冊を残す。">
+    <meta property="og:image" content="favicon.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+
+    <link rel="manifest" href="site.webmanifest">
+
+
+</head>
+
+<body>
+
+    <header>
+        <h1>Xutoco</h1>
+        <p>執筆する</p>
+    </header>
+
+    <main class="write-area">
+
+        <div class="author-key-area">
+            <p>あなたの著者鍵（好きな言葉を設定してください）</p>
+            <input type="text" id="authorKey" placeholder="例：my-secret-key-123">
+            <p>この鍵は下書きを開くときに必要になります。忘れないようにしてください。</p>
+        </div>
+
+        <label for="title">題名</label>
+        <input type="text" id="title" placeholder="本のタイトル">
+
+        <label for="author">著者名</label>
+        <input type="text" id="author" placeholder="著者名">
+
+        <label for="content">本文</label>
+        <textarea id="content" placeholder="ここに本を書いてください。"></textarea>
+
+        <div class="personal-info-warning">
+           
+            <!-- 左下に配置するフッター（プライバシーポリシー ＋ お問い合わせ） -->
+<footer style="position: fixed; bottom: 15px; left: 20px; font-size: 0.8rem; z-index: 100;">
+  
+    <a href="https://forms.gle/FkSCEAcZFSJ9ZWMu5" target="_blank" rel="noopener noreferrer" style="color: #888; text-decoration: none;">お問い合わせ</a>
+</footer>
+            </p>
+
+            <p>
+                本文や著者名に、実名・住所・電話番号・メールアドレス・学校名・アカウント情報などの個人情報を含めないでください。
+            </p>
+
+            <label>
+                <input type="checkbox" id="personalInfoCheck">
+                個人情報を含んでいないことを確認しました。
+            </label>
+        </div>
+
+        <div class="button-area">
+            <button id="readButton">読本</button>
+            <button id="saveButton">原稿保管</button>
+            <button id="publishButton">出版する</button>
+        </div>
+
+        <p id="status">状態：原稿</p>
+
+        <a href="index.html">Xutocoトップへ戻る</a>
+
+    </main>
+
+    <script type="module" src="script.js"></script>
+
+</body>
+</html>

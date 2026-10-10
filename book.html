@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xutoco - 読本</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- ファビコン -->
+    <link rel="icon" href="favicon.png" type="image/png">
+
+    <!-- OGP設定 -->
+    <meta property="og:title" content="Xutoco - 読本">
+    <meta property="og:description" content="静謐な図書室で言葉を読む。">
+    <meta property="og:image" content="favicon.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+
+    <link rel="manifest" href="site.webmanifest">
+</head>
+
+<body>
+
+    <header>
+        <h1>Xutoco</h1>
+        <p>読本</p>
+    </header>
+
+    <main class="book-area">
+
+        <h2 id="bookTitle"></h2>
+
+        <p id="bookAuthor"></p>
+        
+        <p id="bookDate"></p>
+
+        <hr>
+
+        <div id="bookContent"></div>
+
+        <div class="button-area">
+            <a href="index.html">Xutocoトップへ戻る</a>
+        </div>
+
+    </main>
+
+    <script type="module" src="script.js"></script>
+
+    <!-- 左下に配置するフッター（プライバシーポリシー ＋ お問い合わせ） -->
+<footer style="position: fixed; bottom: 15px; left: 20px; font-size: 0.8rem; z-index: 100;">
+    <a href="privacy.html" style="color: #888; text-decoration: none; margin-right: 15px;">プライバシーポリシー・利用規約</a>
+    <a href="https://forms.gle/FkSCEAcZFSJ9ZWMu5" target="_blank" rel="noopener noreferrer" style="color: #888; text-decoration: none;">お問い合わせ</a>
+</footer>
+
+</body>
+</html>

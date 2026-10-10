@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>本を探す - Xutoco</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- ファビコン -->
+    <link rel="icon" href="favicon.png" type="image/png">
+
+    <!-- OGP設定 -->
+    <meta property="og:title" content="本を探す - Xutoco">
+    <meta property="og:description" content="静かな図書室の本棚から、一冊の本を開く。">
+    <meta property="og:image" content="favicon.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+
+    <link rel="manifest" href="site.webmanifest">
+
+    
+</head>
+
+<body>
+
+    <header>
+        <h1>Xutoco</h1>
+        <p>本を探す</p>
+    </header>
+
+    <main class="bookshelf-main">
+
+        
+
+        <h2>図書室の本棚</h2>
+
+        <!-- 本棚エリア（横スクロール） -->
+        <div class="bookshelf-container">
+            <div class="shelf-board"></div> <!-- 上の棚板 -->
+            
+            <div class="bookshelf" id="bookshelf">
+                <!-- JavaScriptでここに背表紙が並びます -->
+            </div>
+
+            <div class="shelf-board"></div> <!-- 下の棚板 -->
+        </div>
+
+        <div class="button-area">
+            <button id="randomButton">一冊開く</button>
+            <a href="index.html">Xutocoトップへ戻る</a>
+
+            <!-- index.html のボタン例 -->
+<a href="create-bookshelf.html" style="display: inline-block; margin-top: 10px;">＋ おすすめ本棚を作る</a>
+
+<a href="bookshelves.html">本棚を見る</a>
+        </div>
+
+    </main>
+
+    <script type="module" src="script.js"></script>
+
+    <!-- 左下に配置するフッター（プライバシーポリシー ＋ お問い合わせ） -->
+<footer style="position: fixed; bottom: 15px; left: 20px; font-size: 0.8rem; z-index: 100;">
+    <a href="privacy.html" style="color: #888; text-decoration: none; margin-right: 15px;">プライバシーポリシー・利用規約</a>
+    <a href="https://forms.gle/FkSCEAcZFSJ9ZWMu5" target="_blank" rel="noopener noreferrer" style="color: #888; text-decoration: none;">お問い合わせ</a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>本棚 - Xutoco</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://xutoco.vercel.app/favicon.png">
+</head>
+<body>
+
+    <!-- 右上コピーライト -->
+    <p style="position: fixed; top: 15px; right: 20px; color: #bbb; font-size: 0.75rem; margin: 0; z-index: 100;">
+        © 2026 Xutoco
+    </p>
+
+    <header style="max-width: 600px; margin: 0 auto; padding: 20px 20px 0;">
+        <h1 id="shelfTitle">読み込み中...</h1>
+        <p id="shelfCurator" style="color: #666; font-size: 0.9rem; margin-top: 5px;"></p>
+    </header>
+
+    <main style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="font-size: 1.1rem; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 15px;">この本棚にある作品</h2>
+        <div id="bookList" style="display: flex; flex-direction: column; gap: 15px;">
+            <p style="color: #888;">本を読み込み中...</p>
+        </div>
+
+        <p style="margin-top: 30px;">
+            <a href="create-bookshelf.html" style="margin-right: 15px;">＋ 自分も本棚を作る</a>
+            <a href="index.html" style="color: #666; text-decoration: none;">← トップに戻る</a>
+        </p>
+    </main>
+
+    <!-- 左下フッター -->
+    <footer style="position: fixed; bottom: 15px; left: 20px; font-size: 0.8rem; z-index: 100;">
+        <a href="privacy.html" style="color: #888; text-decoration: none; margin-right: 15px;">プライバシーポリシー・利用規約</a>
+        <a href="https://forms.gle/FkSCEAcZFSJ9ZWMu5" target="_blank" rel="noopener noreferrer" style="color: #888; text-decoration: none;">お問い合わせ</a>
+    </footer>
+
+<script type="module">
+        import { db } from "./firebase.js";
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const shelfId = urlParams.get("id");
+
+        const shelfTitle = document.getElementById("shelfTitle");
+        const shelfCurator = document.getElementById("shelfCurator");
+        const bookList = document.getElementById("bookList");
+
+        async function loadBookshelf() {
+            if (!shelfId) {
+                shelfTitle.textContent = "本棚が見つかりません";
+                bookList.innerHTML = "<p>有効な本棚IDが指定されていません。</p>";
+                return;
+            }
+
+            try {
+                const shelfDoc = await getDoc(doc(db, "bookshelves", shelfId));
+                if (!shelfDoc.exists()) {
+                    shelfTitle.textContent = "本棚が存在しません";
+                    bookList.innerHTML = "<p>該当する本棚は見つかりませんでした。</p>";
+                    return;
+                }
+
+                const shelfData = shelfDoc.data();
+                shelfTitle.textContent = shelfData.title || "無題の本棚";
+                shelfCurator.textContent = `作成者: ${shelfData.curator || "名無し"}`;
+
+                const bookIds = shelfData.bookIds || [];
+                if (bookIds.length === 0) {
+                    bookList.innerHTML = "<p style='color: #888;'>この本棚にはまだ本がありません。</p>";
+                    return;
+                }
+
+                bookList.innerHTML = "";
+                for (const bookId of bookIds) {
+                    try {
+                        const bookDoc = await getDoc(doc(db, "books", bookId));
+                        if (bookDoc.exists()) {
+                            const book = bookDoc.data();
+                            const card = document.createElement("div");
+                            card.style.cssText = "border: 1px solid #ddd; padding: 12px 15px; border-radius: 6px; background: #fff;";
+                            card.innerHTML = `
+                                <h3 style="margin: 0 0 5px; font-size: 1rem;">
+                                    <a href="book.html?id=${bookDoc.id}" style="color: #333; text-decoration: none;">${book.title || "無題"}</a>
+                                </h3>
+                                <p style="margin: 0; font-size: 0.85rem; color: #666;">著者: ${book.author || "名無し"}</p>
+                            `;
+                            bookList.appendChild(card);
+                        }
+                    } catch (e) {
+                        console.error("個別本読み込みエラー:", e);
+                    }
+                }
+            } catch (error) {
+                console.error("エラー:", error);
+                shelfTitle.textContent = "エラーが発生しました";
+                bookList.innerHTML = "<p style='color: red;'>データの読み込みに失敗しました。</p>";
+            }
+        }
+
+        loadBookshelf();
+    </script>ｘｘ
+</body>
+</html>
